@@ -1,65 +1,58 @@
-𝔸 ℂ𝕠𝕠𝕝 𝕎𝕒𝕪 𝕋𝕠 𝕊𝕖𝕥𝕦𝕡 𝕒 | 𝕆𝕡𝕖𝕟 𝕍𝕡𝕟 𝕊𝕖𝕣𝕧𝕖𝕣 𝔽𝕠𝕣 𝕚𝕣𝕒𝕟☘️
+# 𝔸 𝕊𝕥𝕖𝕒𝕝𝕙 𝕎𝕒𝕪 𝕋𝕠 𝕊𝕖𝕥𝕦𝕡 𝕒 | 𝕆𝕡𝕖𝕟 𝕍𝕡𝕟 𝕊𝕖𝕣𝕧𝕖𝕣 𝕗𝕠𝕣 𝕚𝕣𝕒𝕟☘️
 ***
 
-# 🛡️ OpenVPN over Cloudflare Tunnel
+# 🛡️ اوپن‌وی‌ان (OpenVPN) روی تانل کلودفلر
+> **یک راهکار امن و مقاوم در برابر سانسور با استفاده از گوگل کلاود و کلودفلر.**
 
-> **A censorship-resistant, secure OpenVPN setup using Google Cloud and Cloudflare.**
-
-This project provides a step-by-step guide to deploying a private OpenVPN server on **Google Cloud** and proxying it through **Cloudflare Tunnel**. By routing traffic over **Port 443 (HTTPS)**, this setup mimics standard web traffic, making it highly effective at bypassing firewalls and deep packet inspection (DPI).
+این پروژه یک راهنمای گام‌به‌گام برای استقرار یک سرور اوپن‌وی‌ان (OpenVPN) خصوصی بر روی **Google Cloud** و پروکسی کردن آن از طریق **Cloudflare Tunnel** ارائه می‌دهد. با مسیریابی ترافیک از طریق **پورت ۴۴۳ (HTTPS)**، این پیکربندی ترافیک را کاملاً شبیه به وب‌گردی معمولی نشان می‌دهد که آن را بسیار موثر در دور زدن فایروال‌ها و بازرسی عمیق بسته‌ها (DPI) می‌کند.
 
 ![Ubuntu](https://img.shields.io/badge/OS-Ubuntu%2020.04%2F22.04-blue)
 ![OpenVPN](https://img.shields.io/badge/VPN-OpenVPN-green)
 ![Cloudflare](https://img.shields.io/badge/Proxy-Cloudflare%20Tunnel-orange)
 ![License](https://img.shields.io/badge/License-MIT-purple)
 
-## ✨ Features
+## ✨ ویژگی‌ها
+*   **🕵️ استلث (مخفی):** اجرا روی پورت ۴۴۳ (HTTPS)، ترکیب شدن با ترافیک عادی وب.
+*   **🔒 امن:** استفاده از تانل کلودفلر (`cloudflared`) برای پنهان‌سازی کامل آدرس IP سرور.
+*   **🚀 سریع:** بهره‌گیری از زیرساخت جهانی گوگل کلاود و شبکه لبه‌ای (Edge) کلودفلر.
+*   **🛡️ ضد سانسور:** دور زدن مسدودسازی پورت‌های استاندارد و فیلترهای DPI.
+*   **📱 چند پلتفرمی:** سازگار با لینوکس، ویندوز، مک‌او‌اس، اندروید و iOS.
 
-*   **🕵️ Stealth:** Runs on Port 443 (HTTPS), blending in with normal web traffic.
-*   **🔒 Secure:** Uses Cloudflare Tunnel (`cloudflared`) to hide your server's IP address entirely.
-*   **🚀 Fast:** Leverages Google Cloud’s global infrastructure and Cloudflare’s edge network.
-*   **🛡️ Anti-Censorship:** Bypasses standard port blocking and DPI filters.
-*   **📱 Multi-Platform:** Works on Linux, Windows, macOS, Android, and iOS.
+## 📋 پیش‌نیازها
+قبل از شروع، مطمئن شوید که موارد زیر را دارید:
+1.  **حساب گوگل کلاود** با یک پروژه ایجاد شده.
+2.  **یک نام دامنه** (هر رجیستراری کار می‌کند: Namecheap، GoDaddy، NIC.ir و غیره).
+3.  **دسترسی روت (Root)** به ماشین مجازی گوگل کلاود شما (SSH).
+4.  **دانش پایه لینوکس** (کار با ترمینال).
 
-## 📋 Prerequisites
+## 🚀 شروع سریع
 
-Before starting, ensure you have:
+### مرحله ۱: راه‌اندازی ماشین مجازی گوگل کلاود
+1.  به [کنسول گوگل کلاود](https://console.cloud.google.com/) بروید.
+2.  یک **Compute Engine Instance** جدید ایجاد کنید.
+    *   **سیستم عامل:** Ubuntu 22.04 LTS (پیشنهاد می‌شود).
+    *   **نوع ماشین:** `e2-micro` (شامل طرح رایگان) یا `e2-small` برای عملکرد بهتر.
+3.  **قوانین فایروال:** مطمئن شوید که شبکه VPC شما اجازه ترافیک ورودی روی **TCP 80** و **TCP 443** را می‌دهد.
 
-1.  **A Google Cloud Account** with a project created.
-2.  **A Domain Name** (Any registrar works: Namecheap, GoDaddy, NIC.ir, etc.).
-3.  **Root Access** to your Google Cloud VM (SSH).
-4.  **Basic Linux Knowledge** (Terminal usage).
-
-## 🚀 Quick Start
-
-### Step 1: Provision the Google Cloud VM
-
-1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2.  Create a new **Compute Engine Instance**.
-    *   **OS:** Ubuntu 22.04 LTS (Recommended).
-    *   **Machine Type:** `e2-micro` (Free Tier eligible) or `e2-small` for better performance.
-3.  **Firewall Rules:** Ensure your VPC Network allows inbound traffic on **TCP 80** and **TCP 443**.
-
-### Step 2: Install OpenVPN
-
-SSH into your VM and run the following commands:
+### مرحله ۲: نصب اوپن‌وی‌ان
+وارد SSH سرور خود شوید و دستورات زیر را اجرا کنید:
 
 ```bash
-# Update system
+# به‌روزرسانی سیستم
 sudo apt update && sudo apt upgrade -y
 
-# Install OpenVPN and EasyRSA
+# نصب OpenVPN و EasyRSA
 sudo apt install openvpn easy-rsa -y
 ```
 
-### Step 3: Configure OpenVPN
-
-Create the server configuration file:
+### مرحله ۳: پیکربندی اوپن‌وی‌ان
+فایل پیکربندی سرور را ایجاد کنید:
 
 ```bash
 sudo nano /etc/openvpn/server.conf
 ```
 
-Paste the following configuration. **Key Change:** We use `port 443` and `proto tcp` to mimic HTTPS.
+پیکربندی زیر را در آن جایگذاری کنید. **تغییر کلیدی:** ما از `port 443` و `proto tcp` استفاده می‌کنیم تا ترافیک شبیه HTTPS باشد.
 
 ```conf
 port 443
@@ -75,7 +68,7 @@ topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 
-# Push DNS settings (Cloudflare DNS)
+# تنظیمات DNS (Cloudflare DNS)
 push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 208.67.222.222"
 push "dhcp-option DNS 208.67.220.220"
@@ -85,7 +78,7 @@ tls-version-min 1.2
 tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384
 compression gzip
 
-# Security
+# امنیت
 user nobody
 group nogroup
 persist-key
@@ -95,28 +88,27 @@ verb 3
 explicit-exit-notify 1
 ```
 
-### Step 4: Enable IP Forwarding & NAT
-
-To allow internet access through the VPN, configure NAT:
+### مرحله ۴: فعال‌سازی IP Forwarding و NAT
+برای اجازه دسترسی به اینترنت از طریق VPN، باید NAT را پیکربندی کنید:
 
 ```bash
-# Enable IP Forwarding
+# فعال‌سازی IP Forwarding
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
-# Configure iptables
+# پیکربندی iptables
 sudo iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
 sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 sudo iptables -A INPUT -i tun+ -j ACCEPT
 sudo iptables -A FORWARD -i tun+ -j ACCEPT
 
-# Persist rules
+# ذخیره قوانین برای پایدار ماندن پس از ریستارت
 sudo apt install iptables-persistent -y
 sudo netfilter-persistent save
 ```
 
-### Step 5: Start OpenVPN
+### مرحله ۵: شروع اوپن‌وی‌ان
 
 ```bash
 sudo systemctl enable openvpn@server
@@ -126,63 +118,59 @@ sudo systemctl status openvpn@server
 
 ---
 
-## ☁️ Step 6: Set Up Cloudflare Tunnel
+## ☁️ مرحله ۶: راه‌اندازی تانل کلودفلر
+این مرحله آدرس IP گوگل کلاود شما را مخفی کرده و امکان اتصال از طریق دامنه شما را فراهم می‌کند.
 
-This step hides your Google Cloud IP and allows connection via your domain.
-
-### 1. Install `cloudflared`
+### ۱. نصب `cloudflared`
 
 ```bash
 wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
 sudo dpkg -i cloudflared-linux-amd64.deb
 ```
 
-### 2. Create the Tunnel
+### ۲. ایجاد تانل
 
 ```bash
 cloudflared tunnel create my-openvpn-tunnel
 ```
-*Copy the **Tunnel ID** and the path to the **credentials file** generated.*
+*آدرس **Tunnel ID** و مسیر فایل **credentials** ایجاد شده را کپی کنید.*
 
-### 3. Configure Routing
+### ۳. پیکربندی Routing
+فایل پیکربندی را ایجاد یا ویرایش کنید:
 
-Create/edit the config file:
 ```bash
 nano ~/.cloudflared/config.yml
 ```
 
-Add the following (replace `<YOUR-TUNNEL-ID>` and your username):
+مقادیر زیر را اضافه کنید (نام کاربری و `<YOUR-TUNNEL-ID>` را جایگزین کنید):
 
 ```yaml
 tunnel: <YOUR-TUNNEL-ID>
 credentials-file: /home/your_username/.cloudflared/<YOUR-TUNNEL-ID>.json
-
 ingress:
   - hostname: vpn.yourdomain.com
     service: tcp://localhost:443
   - service: http_status:404
 ```
 
-### 4. Run the Tunnel
+### ۴. اجرای تانل
 
 ```bash
 cloudflared tunnel run my-openvpn-tunnel
 ```
 
-### 5. Configure DNS in Cloudflare Dashboard
-
-1.  Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/).
-2.  Go to **DNS** > **Records**.
-3.  Add a **CNAME** record:
-    *   **Name:** `vpn` (creates `vpn.yourdomain.com`)
+### ۵. پیکربندی DNS در داشبورد کلودفلر
+1.  وارد [داشبورد کلودفلر](https://dash.cloudflare.com/) شوید.
+2.  به بخش **DNS** > **Records** بروید.
+3.  یک رکورد **CNAME** اضافه کنید:
+    *   **Name:** `vpn` (این دامنه `vpn.yourdomain.com` را ایجاد می‌کند)
     *   **Target:** `<YOUR-TUNNEL-ID>.cfargotunnel.com`
-    *   **Proxy Status:** Proxied (Orange Cloud icon should be ON)
+    *   **Proxy Status:** Proxied (آیکون ابر باید نارنجی/روشن باشد)
 
 ---
 
-## 💻 Step 7: Client Configuration
-
-Download the `ca.crt`, `client.crt`, and `client.key` files generated during the OpenVPN setup. Create a file named `client.ovpn` on your device with the following content:
+## 💻 مرحله ۷: پیکربندی کلاینت (کاربر)
+فایل‌های `ca.crt`، `client.crt` و `client.key` که در مرحله نصب اوپن‌وی‌ان ایجاد شده‌اند را دانلود کنید. یک فایل با نام `client.ovpn` روی دستگاه خود ایجاد کنید و محتوای زیر را در آن قرار دهید:
 
 ```conf
 client
@@ -203,24 +191,20 @@ verify-x509-name vpn.yourdomain.com name
 verb 3
 ```
 
-**Connect using any OpenVPN client** (OpenVPN Connect, Tunnelblick, OpenVPN for Android, etc.) and import this file.
+**با استفاده از هر کلاینت اوپن‌وی‌ان** (OpenVPN Connect، Tunnelblick، OpenVPN for Android و غیره) به این فایل متصل شوید.
 
 ---
 
-## ⚠️ Troubleshooting & Notes
+## ⚠️ عیب‌یابی و نکات مهم
+*   **مسدودسازی پورت ۴۴۳:** در موارد نادر، ISPها ممکن است پورت ۴۴۳ را مسدود کنند. در این صورت، از **OpenVPN over SSH** یا ابزارهایی مانند **Streisand** استفاده کنید.
+*   **عملکرد:** کلودفلر تأخیر کمی اضافه می‌کند. برای بهترین سرعت، منطقه‌ای از گوگل کلاود را انتخاب کنید که به موقعیت مکانی شما نزدیک‌تر است (مثلاً `us-central1` برای آمریکا، `europe-west1` برای اروپا).
+*   **امنیت:** فایل‌های `.key` خود را هرگز به صورت عمومی به اشتراک نگذارید. `cloudflared` و OpenVPN را به‌روز نگه دارید.
+*   **گواهی SSL:** شما به گواهی SSL عمومی برای سرور نیاز **ندارید**. کلودفلر پایان‌بخشی SSL را در لبه شبکه انجام می‌دهد.
 
-*   **Port 443 Blocking:** In rare cases, ISPs may block port 443. If this happens, consider using **OpenVPN over SSH** or tools like **Streisand**.
-*   **Performance:** Cloudflare adds minimal latency. For best speeds, choose a Google Cloud region close to your location (e.g., `us-central1`, `europe-west1`).
-*   **Security:** Never share your `.key` files publicly. Keep `cloudflared` and OpenVPN updated.
-*   **SSL Certificates:** You do **not** need a public SSL certificate for the server. Cloudflare handles SSL termination at the edge.
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## 📜 مجوز
+این پروژه تحت مجوز MIT منتشر شده است. برای جزئیات بیشتر به فایل [LICENSE](LICENSE) مراجعه کنید.
 
 ---
-
 <div align="center">
-
-Made ❤️ by **@𝔸𝕪𝕙𝕒𝕟𝕄𝕒𝕟𝕤𝕦𝕣 𝟚𝟘𝟚𝟞☘️** | Powered by **Google Cloud** & **Cloudflare**
-
+ساخته شده با ❤️ توسط **@𝔸𝕪𝕙𝕒𝕟𝕄𝕒𝕟𝕤𝕦𝕣 𝟚𝟘𝟚𝟞☘️** | قدرتمند شده توسط **Google Cloud** و **Cloudflare**
 </div>
