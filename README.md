@@ -213,11 +213,6 @@ verb 3
 *   **Performance:** Cloudflare adds minimal latency. For best speeds, choose a Google Cloud region close to your location (e.g., `us-central1`, `europe-west1`).
 *   **Security:** Never share your `.key` files publicly. Keep `cloudflared` and OpenVPN updated.
 *   **SSL Certificates:** You do **not** need a public SSL certificate for the server. Cloudflare handles SSL termination at the edge.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request or open an Issue.
-
 ## 📜 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
